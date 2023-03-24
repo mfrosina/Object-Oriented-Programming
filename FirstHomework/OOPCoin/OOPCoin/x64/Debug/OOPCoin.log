@@ -1,0 +1,4 @@
+﻿  User.cpp
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\User.cpp(143,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\User.cpp(77): warning C4715: 'createUser': not all control paths return a value
+  OOPCoin.vcxproj -> C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\x64\Debug\OOPCoin.exe
