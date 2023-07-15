@@ -21,14 +21,13 @@ void createSystemUser();
 
 bool createUser(const char* name, const double investment);
 bool existsUser(const char* name, User& user);
+bool existsUserById(const unsigned id);
 bool removeUser(const char* name);
 
-void print(); //to test
+void swapUsers(User& user1, User& user2); //helper function to find the wealthiest users
+void sortUsersByWealth(); //helper function to find the wealthiest users
 
-void swapUsers(User& user1, User& user2);
-void sortUsersByWealth();
-
-void wealthiestUsers(unsigned number);
+bool wealthiestUsers(unsigned number);
 
 void addUsers(const User* usersToAdd, const unsigned size);
 

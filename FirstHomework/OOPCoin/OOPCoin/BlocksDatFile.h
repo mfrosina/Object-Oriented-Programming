@@ -10,8 +10,9 @@ struct TransactionBlock;
 
 struct BlocksDatFile
 {
+private:
 	constexpr static const char FILE_NAME[16] = "blocks.dat";
-
+public:
 	static unsigned findNumberOfSavedBlocks();
 	static TransactionBlock* readBlocksFromFile();
 	static void addBlockToFile(const TransactionBlock& block);

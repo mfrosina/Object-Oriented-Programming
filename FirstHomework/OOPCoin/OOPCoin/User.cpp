@@ -64,7 +64,7 @@ bool createUser(const char* name, const double investment)
 	users[numberOfUsers] = user;
 	numberOfUsers++;
 
-	sendCoins("SystemUser", name, investment);
+	sendCoins(0, user.id, investment);
 	if (UsersDatFile::addUserToFile(user))
 	{
 		std::cout << "Saved changes in file! (user is saved)\n";
@@ -93,6 +93,18 @@ bool existsUser(const char* name, User& user)
 	return false;
 }
 
+bool existsUserById(const unsigned id)
+{
+	for (unsigned i = 0; i < numberOfUsers; i++)
+	{
+		if (users[i].id == id)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool removeUser(const char* name)
 {
 	if (name == nullptr || strcmp(name,"SystemUser") == 0)
@@ -111,7 +123,7 @@ bool removeUser(const char* name)
 		if (users[i].id == user.id)
 		{
 			double oopCoins = getUserCoins(user.id);
-			sendCoins(user.name, "SystemUser",oopCoins);
+			sendCoins(user.id, 0, oopCoins);
 			unsigned ind = i + 1;
 			if (ind == numberOfUsers)
 			{
@@ -166,12 +178,12 @@ void sortUsersByWealth()
 	}
 }
 
-void wealthiestUsers(unsigned number)
+bool wealthiestUsers(unsigned number)
 {
-	if (number > numberOfUsers)
+	if (number >= numberOfUsers)
 	{
 		std::cout << "Too big number is entered. There are not that much users in the system!\n";
-		return;
+		return false;
 	}
 	sortUsersByWealth();
 	long long now = time(NULL);
@@ -185,20 +197,20 @@ void wealthiestUsers(unsigned number)
 	if (!out.is_open())
 	{
 		std::cout << "Error: can not open txt file\n";
-		return;
+		return false;
 	}
 	for (unsigned i = 0; i < number; i++)
 	{
-		if (users[i].id == 0)// skip the SystemUser, suppose that he can not be the wealthiest
+		if (users[i].id == 0) //skip the SystemUser, suppose that he can not be the wealthiest
 		{
 			number++;
 			continue;
 		}
 		double userCoins = getUserCoins(users[i].id);
-		std::cout << "UserName: " << users[i].name << " Coins: " << userCoins << std::endl;
 		out << "UserName: " << users[i].name << " Coins: " << userCoins << '\n';
 	}
 	out.close();
+	return true;
 }
 
 void addUsers(const User* usersToAdd, const unsigned size)

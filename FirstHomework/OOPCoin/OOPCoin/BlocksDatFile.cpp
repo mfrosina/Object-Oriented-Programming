@@ -6,7 +6,7 @@ unsigned BlocksDatFile::findNumberOfSavedBlocks()
 	std::ifstream binFile(FILE_NAME, std::ios::binary);
 	if (!binFile.is_open())
 	{
-		std::cout << "Error: blocks.dat file can not be opened!\n";
+		std::cout << "Error: blocks.dat file can not be opened! There are not existing blocks of transactions yet.\n";
 		return 0;
 	}
 	binFile.seekg(0, std::ios::end); //position on the end
@@ -19,17 +19,17 @@ TransactionBlock* BlocksDatFile::readBlocksFromFile()
 	std::ifstream binFile(FILE_NAME, std::ios::binary);
 	if (!binFile.is_open())
 	{
-		std::cout << "Error: blocks.dat file can not be opened!\n";
+		std::cout << "Error: blocks.dat file can not be opened! There are not existing blocks of transactions yet.\n";
 		return{};
 	}
-	TransactionBlock readBlocks[512];
 	unsigned blocksNumber = findNumberOfSavedBlocks();
+	TransactionBlock* readedBlocks = new TransactionBlock[blocksNumber];
 	for (unsigned i = 0; i < blocksNumber; i++)
 	{
-		binFile.read((char*)&readBlocks[i], sizeof(TransactionBlock));
+		binFile.read((char*)&readedBlocks[i], sizeof(TransactionBlock));
 	}
 	binFile.close();
-	return readBlocks;
+	return readedBlocks;
 }
 
 void BlocksDatFile::addBlockToFile(const TransactionBlock& block)
@@ -53,7 +53,7 @@ void BlocksDatFile::deleteBlock(const unsigned blockId)
 		return;
 	}
 	unsigned numberOfSavedBlocks = findNumberOfSavedBlocks();
-	TransactionBlock blocks[512];
+	TransactionBlock* blocks = new TransactionBlock[numberOfSavedBlocks];
 	for (unsigned i = 0; i < numberOfSavedBlocks; i++)
 	{
 		in.read((char*)&blocks[i], sizeof(TransactionBlock));
@@ -74,5 +74,6 @@ void BlocksDatFile::deleteBlock(const unsigned blockId)
 		}
 	}
 	out.close();
+	delete[]blocks;
 }
 

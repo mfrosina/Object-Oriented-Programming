@@ -5,25 +5,8 @@
 #include "TransactionBlock.h"
 #include "Command.h"
 
-int main()
+void run()
 {
-
-	unsigned numberOfExistingUsers = UsersDatFile::findNumberOfSavedUsers();
-	if (numberOfExistingUsers == 0)
-	{
-		createSystemUser();
-	}
-	else if(numberOfExistingUsers > 1)
-	{
-		User* readedUsers = new User[numberOfExistingUsers];
-		readedUsers = UsersDatFile::readUsersFromFile();
-		addUsers(readedUsers, numberOfExistingUsers);
-
-		unsigned numberOfExistingBlocks = BlocksDatFile::findNumberOfSavedBlocks();
-		TransactionBlock* readedBlocks = new TransactionBlock[numberOfExistingBlocks];
-		readedBlocks = BlocksDatFile::readBlocksFromFile();
-		addBlocks(readedBlocks, numberOfExistingBlocks);
-	}
 	std::cout << "Enter one of the following commands:\n";
 	Command::executeCommand("help");
 	char cmd[128];
@@ -32,10 +15,37 @@ int main()
 		std::cin.getline(cmd, 128);
 		Command::executeCommand(cmd);
 
-		if(strcmp(cmd,"exit") != 0)
+		if (strcmp(cmd, "exit") != 0)
 			std::cout << "Enter command. Type <help> for help; <exit> to exit the program...\n";
 
 	} while (strcmp(cmd, "exit") != 0);
+}
+int main()
+{
+	unsigned numberOfExistingUsers = UsersDatFile::findNumberOfSavedUsers();
+	if (numberOfExistingUsers == 0)
+	{
+		createSystemUser();
+		run();
+	}
+	else
+	{
+		User* readedUsers = UsersDatFile::readUsersFromFile();
+		addUsers(readedUsers, numberOfExistingUsers);
+		unsigned numberOfExistingBlocks = BlocksDatFile::findNumberOfSavedBlocks();
+		TransactionBlock* readedBlocks = nullptr;
+		if (numberOfExistingBlocks != 0)
+		{
+			readedBlocks = BlocksDatFile::readBlocksFromFile();
+			addBlocks(readedBlocks, numberOfExistingBlocks);
+		}
+
+		run();
+		
+		delete[]readedUsers;
+		delete[]readedBlocks;
+	}
+	
 
 	return 0;
 }

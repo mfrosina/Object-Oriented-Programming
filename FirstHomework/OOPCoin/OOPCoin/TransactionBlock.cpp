@@ -101,33 +101,28 @@ bool addTransactionToBlock(const Transaction& transaction)
 	return true;
 }
 
-bool sendCoins(const char* fromUserName, const char* toUserName, double amount)
+bool sendCoins(const unsigned fromUserId, const unsigned toUserId, double amount)
 {
-	if (fromUserName == nullptr || toUserName == nullptr)
-	{
-		std::cout << "Invalid names for the users!\n";
-		return false;
-	}
 	User fromUser;
 	User toUser;
-	if (!existsUser(fromUserName, fromUser) || !existsUser(toUserName, toUser))
+	if (!existsUserById(fromUserId) || !existsUserById(toUserId))
 	{
-		std::cout << "User with the entered name does not exist!\n";
+		std::cout << "Users with the given ids do not exist!\n";
 		return false;
 	}
 	bool flag = false;
-	if (toUser.id != 0)
+	if (toUserId != 0)
 	{
 		amount *= 420;
 	}
-	if (fromUser.id != 0)
+	if (fromUserId != 0)
 	{
 		double oopCoins = 0;
 		for (unsigned i = 0; i < numberOfBlocks; i++)
 		{
 			for (unsigned j = 0; j < blocks[i].validTransactions; j++)
 			{
-				if (blocks[i].transactions[j].receiver == fromUser.id)
+				if (blocks[i].transactions[j].receiver == fromUserId)
 				{
 					flag = true;
 					oopCoins += blocks[i].transactions[j].coins;
@@ -141,8 +136,8 @@ bool sendCoins(const char* fromUserName, const char* toUserName, double amount)
 		}
 	}
 	Transaction transaction;
-	transaction.sender = fromUser.id;
-	transaction.receiver = toUser.id;
+	transaction.sender = fromUserId;
+	transaction.receiver = toUserId;
 	transaction.coins = amount;
 	long long now = time(nullptr);
 	long long secondsFrom1970 = difftime(now, 1970);
@@ -150,13 +145,16 @@ bool sendCoins(const char* fromUserName, const char* toUserName, double amount)
 
 	addTransactionToBlock(transaction);
 
-	Transaction transactionMin;
-	transactionMin.sender = 0;
-	transactionMin.receiver = fromUser.id;
-	transactionMin.coins = -amount;
-	transactionMin.time = secondsFrom1970;
+	if (fromUserId != 0 && toUserId != 0)
+	{
+		Transaction transactionMin;
+		transactionMin.sender = 0;
+		transactionMin.receiver = fromUserId;
+		transactionMin.coins = -amount;
+		transactionMin.time = secondsFrom1970;
 
-	addTransactionToBlock(transactionMin);
+		addTransactionToBlock(transactionMin);
+	}
 
 	return true;
 }
@@ -194,14 +192,14 @@ void printTBlock()
 	}
 }
 
-bool verifyTransactions()
+int verifyTransactions()
 {
 	for (unsigned i = 0; i < numberOfBlocks; i++)
 	{
 		if (blocks[i].validTransactions > 16
 			|| blocks[i].validTransactions < 1)
 		{
-			return false;
+			return blocks[i].id;
 		}
 		if (i == 0)
 		{
@@ -212,18 +210,18 @@ bool verifyTransactions()
 		{
 			if (blocks[i].prevBlockId != blocks[i - 1].id)
 			{
-				return false;
+				return blocks[i].id;
 			}
 			unsigned char* prevBlockData = reinterpret_cast<unsigned char*>(&blocks[i-1]);
 			unsigned prevBlockDataSize = sizeof(blocks[i-1]);
 			unsigned prevBlockHash = computeHash(prevBlockData, prevBlockDataSize);
 			if (blocks[i].prevBlockHash != prevBlockHash)
 			{
-				return false;
+				return blocks[i].id;
 			}
 		}
 	}
-	return true;
+	return -1;
 }
 
 void swapBlocks(TransactionBlock& block1, TransactionBlock& block2)
@@ -238,25 +236,34 @@ void sortBlocks()
 	{
 		return;
 	}
-	for (unsigned i = 0; i < numberOfBlocks-1; i++)
+	for (unsigned i = 0; i < numberOfBlocks; i++)
 	{
 		double coinsIBlock = 0, coinsKBlock = 0;
-		unsigned k = i + 1;
-		for (unsigned j = 0; j < blocks[i].validTransactions; j++)
+		for (unsigned j = i + 1; j < numberOfBlocks; j++)
 		{
-			coinsIBlock += blocks[i].transactions[j].coins;
-		}
-		for (unsigned l = 0; l < blocks[k].validTransactions; l++)
-		{
-			coinsKBlock += blocks[k].transactions[l].coins;
-		}
-		if (coinsIBlock < coinsKBlock)
-		{
-			swapBlocks(blocks[i], blocks[k]);
+			coinsIBlock = getCoinsOfBlock(blocks[i]);
+			coinsKBlock = getCoinsOfBlock(blocks[j]);
+			if (coinsIBlock < coinsKBlock)
+			{
+				swapBlocks(blocks[i], blocks[j]);
+			}
 		}
 	}
 }
-
+void unsortBlocks()
+{
+	for (unsigned i = 0; i < numberOfBlocks; i++)
+	{
+		for (unsigned j = i + 1; j < numberOfBlocks; j++)
+		{
+			if (blocks[i].id > blocks[j].id)
+			{
+				swapBlocks(blocks[i], blocks[j]);
+			}
+		}
+		
+	}
+}
 double getCoinsOfBlock(const TransactionBlock& block)
 {
 	double coinsInBlock = 0;
@@ -267,12 +274,12 @@ double getCoinsOfBlock(const TransactionBlock& block)
 	return coinsInBlock;
 }
 
-void biggestBlocks(const unsigned number)
+bool biggestBlocks(const unsigned number)
 {
 	if (number > numberOfBlocks)
 	{
 		std::cout << "Too big number is entered. There are not that much blocks in the system!\n";
-		return;
+		return false;
 	}
 	sortBlocks();
 	long long now = time(nullptr);
@@ -286,15 +293,16 @@ void biggestBlocks(const unsigned number)
 	if (!out.is_open())
 	{
 		std::cout << "Error: can not open txt file\n";
-		return;
+		return false;
 	}
 	for (unsigned i = 0; i < number; i++)
 	{
 		double blockCoins = getCoinsOfBlock(blocks[i]);
-		std::cout << "Block-Coins: " << blockCoins << " Block-No.: " << blocks[i].id << std::endl;
-		out << "Block-Coins: " << blockCoins << " Block-No.: " << blocks[i].id << '\n';
+		out << "Block-Coins: " << blockCoins << " Block-Serial-Number: " << blocks[i].id << '\n'; //I implemented the function "generateBlockId" so that it matches the serial number of the block being created next
 	}
 	out.close();
+	unsortBlocks();
+	return true;
 }
 
 void addBlocks(const TransactionBlock* blocksToAdd, const unsigned size)

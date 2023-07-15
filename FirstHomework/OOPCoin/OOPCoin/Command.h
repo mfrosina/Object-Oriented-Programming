@@ -10,8 +10,6 @@
 struct Command
 {
 private:
-	char cmdName[32];
-
 	static void createUserCmd();
 	static void removeUserCmd();
 	static void sendCoinsCmd();
@@ -22,10 +20,8 @@ private:
 	static void exitCmd();
 
 public:
-	
 	static void executeCommand(const char* cmd);	
 };
-
 
 
 #endif // !COMMANDS_H

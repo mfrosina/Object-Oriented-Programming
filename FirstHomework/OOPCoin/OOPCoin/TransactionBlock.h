@@ -22,19 +22,18 @@ bool existsBlockID(const unsigned id, TransactionBlock& block);
 
 bool addTransactionToBlock(const Transaction& transaction);
 
-bool sendCoins(const char* fromUserName, const char* toUserName, const double amount);
-void printTransactions(const TransactionBlock& block);//to test
-void printTBlock();//to test
+bool sendCoins(const unsigned fromUserId, const unsigned toUserId, const double amount);
 
 double getUserCoins(const unsigned userId);
 
-bool verifyTransactions();
+int verifyTransactions();
 
-void swapBlocks(TransactionBlock& block1, TransactionBlock& block2);
-void sortBlocks();
+void swapBlocks(TransactionBlock& block1, TransactionBlock& block2); //helper function to find the biggest blocks
+void sortBlocks(); //helper function to find the biggest blocks
+void unsortBlocks(); //arranging the blocks as originally after the biggest blocks function is called
 
-double getCoinsOfBlock(const TransactionBlock& block);
-void biggestBlocks(const unsigned number);
+double getCoinsOfBlock(const TransactionBlock& block); //helper function to find the biggest blocks
+bool biggestBlocks(const unsigned number);
 
 void addBlocks(const TransactionBlock* blocksToAdd, const unsigned size);
 

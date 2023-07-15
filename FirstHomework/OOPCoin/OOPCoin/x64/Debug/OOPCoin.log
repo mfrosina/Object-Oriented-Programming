@@ -1,4 +1,9 @@
-﻿  User.cpp
-C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\User.cpp(143,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\User.cpp(77): warning C4715: 'createUser': not all control paths return a value
+﻿  TransactionBlock.cpp
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(123,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(143,28): warning C4244: 'initializing': conversion from 'double' to '__int64', possible loss of data
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(107,7): warning C4101: 'toUser': unreferenced local variable
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(106,7): warning C4101: 'fromUser': unreferenced local variable
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(166,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(180,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\OOPCoin\TransactionBlock.cpp(270,25): warning C4018: '<': signed/unsigned mismatch
   OOPCoin.vcxproj -> C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\FirstHomework\OOPCoin\x64\Debug\OOPCoin.exe

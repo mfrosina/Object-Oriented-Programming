@@ -21,14 +21,14 @@ User* UsersDatFile::readUsersFromFile()
 		std::cout << "Error: users.dat file can not be opened!\n";
 		return{};
 	}
-	User readUsers[512];
 	unsigned usersNumber = findNumberOfSavedUsers();
+	User* readedUsers = new User[usersNumber];
 	for (unsigned i = 0; i < usersNumber; i++)
 	{
-		binFile.read((char*)&readUsers[i], sizeof(User));
+		binFile.read((char*)&readedUsers[i], sizeof(User));
 	}
 	binFile.close();
-	return readUsers;
+	return readedUsers;
 }
 bool UsersDatFile::addUserToFile(const User& user)
 {
@@ -46,7 +46,7 @@ bool UsersDatFile::addUserToFile(const User& user)
 bool UsersDatFile::removeUserFromFile(const char* name)
 {
 	unsigned usersNumber = findNumberOfSavedUsers();
-	User users[512];
+	User* users = new User[usersNumber];
 	std::fstream in(FILE_NAME, std::ios::in | std::ios::binary);
 	if (!in.is_open())
 	{
@@ -73,5 +73,6 @@ bool UsersDatFile::removeUserFromFile(const char* name)
 		}
 	}
 	out.close();
+	delete[]users;
 	return true;
 }

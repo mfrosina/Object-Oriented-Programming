@@ -7,7 +7,6 @@ void Command::createUserCmd()
 	std::cout << "Enter the name for the new user:\n";
 	std::cin.getline(name, 128);
 	std::cout << "Enter the amount of investment:\n";
-	//std::cin.ignore();
 	std::cin >> investment;
 	std::cin.ignore();
 	if (createUser(name, investment))
@@ -35,17 +34,21 @@ void Command::removeUserCmd()
 }
 void Command::sendCoinsCmd()
 {
-	char from[128];
-	char to[128];
+	unsigned from;
+	unsigned to;
 	double amount;
-	std::cout << "Enter the name of the user who wants to send money:\n";
-	std::cin.getline(from,128);
-	std::cout << "Enter the name of the user who will receive money:\n";
-	//std::cin.ignore();
-	std::cin.getline(to, 128);
+	std::cout << "Enter the ID of the user who wants to send money:\n";
+	std::cin >> from;
+	std::cout << "Enter the ID of the user who will receive money:\n";
+	std::cin >> to;
 	std::cout << "Enter the amount of money:\n";
 	std::cin >> amount;
 	std::cin.ignore();
+	if (from == 0 || to == 0)
+	{
+		std::cout << "Can not send or receive money from the system user. Try again with valid user ID!\n";
+		return;
+	}
 	if (sendCoins(from, to, amount))
 	{
 		std::cout << "Successful transaction!\n";
@@ -57,13 +60,14 @@ void Command::sendCoinsCmd()
 }
 void Command::verifyTransactionsCmd()
 {
-	if (verifyTransactions())
+	int result = verifyTransactions();
+	if (result == -1)
 	{
-		std::cout << "Correct transactions!\n";
+		std::cout << "Correct transaction blocks!\n";
 	}
 	else
 	{
-		std::cout << "There are transactions that are not correct!\n";
+		std::cout << "Transaction block with ID " << result << " is incorrect!\n";
 	}
 }
 void Command::wealthiestUsersCmd()
@@ -72,8 +76,14 @@ void Command::wealthiestUsersCmd()
 	std::cout << "Enter positive number:\n";
 	std::cin >> n;
 	std::cin.ignore();
-	std::cout << "First " << n << " wealthiest users:\n";
-	wealthiestUsers(n);
+	if (wealthiestUsers(n))
+	{
+		std::cout << "First " << n << " wealthiest users successfully saved in txt file!\n";
+	}
+	else
+	{
+		std::cout << "Error while trying to find the first " << n << " wealthiest users.\n";
+	}
 }
 void Command::biggestBlocksCmd()
 {
@@ -81,8 +91,14 @@ void Command::biggestBlocksCmd()
 	std::cout << "Enter positive number:\n";
 	std::cin >> n;
 	std::cin.ignore();
-	std::cout << "First " << n << " biggest blocks:\n";
-	biggestBlocks(n);
+	if (biggestBlocks(n))
+	{
+		std::cout << "First " << n << " biggest blocks successfully saved in txt file!\n";
+	}
+	else
+	{
+		std::cout << "Error while trying to find the first " << n << " biggest blocks.\n";
+	}
 }
 
 void Command::helpCmd()
@@ -106,6 +122,11 @@ void Command::exitCmd()
 }
 void Command::executeCommand(const char* cmd)
 {
+	if (cmd == nullptr)
+	{
+		std::cout << "Invalid cmd name!\n";
+		return;
+	}
 	if (strcmp(cmd, "help") == 0)
 	{
 		helpCmd();
