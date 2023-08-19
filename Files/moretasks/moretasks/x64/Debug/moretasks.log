@@ -1,3 +1,0 @@
-﻿  moretasks.cpp
-C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\Files\moretasks\moretasks\moretasks.cpp(335,38): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  moretasks.vcxproj -> C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\Files\moretasks\x64\Debug\moretasks.exe

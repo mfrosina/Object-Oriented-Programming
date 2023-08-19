@@ -1,5 +1,0 @@
-﻿  ZUZI.cpp
-C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\Files\ZUZI\ZUZI\ZUZI.cpp(109,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\Files\ZUZI\ZUZI\ZUZI.cpp(175): warning C4715: 'findTypeFromGivenStr': not all control paths return a value
-C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\Files\ZUZI\ZUZI\ZUZI.cpp(155): warning C4715: 'findCategoryFromGivenStr': not all control paths return a value
-  ZUZI.vcxproj -> C:\Users\user88\Desktop\2 КУРС ЛЕТЕН СЕМЕСТАР 2023\ООП\Files\ZUZI\x64\Debug\ZUZI.exe
